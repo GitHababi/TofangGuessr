@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,17 +8,27 @@ using UnityEngine.UI;
 public class MapDraggerScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     public RawImage MapImage;
+    public RawImage Pin;
+    public RawImage GreenPin;
     public CameraDraggerScript CameraDragger;
     public float Sensitivity;
+    public float MapSize;
+    public Text LocationString;
+    public Vector2 GuessLocation { get; private set; }
+    public Vector2 CorrectLocation { get; set; } = Vector2.one * 0.5f;
+    public bool CorrectPinVisible;
 
-
-    private bool _selected;
-    private bool _dragging;
+    private bool _selected; // whether mouse is in frame
+    private bool _dragging; // whether mouse is held down
+    private bool _hasMoved; // whether at any point during dragging the mouse has moved.
     private Vector3 _dragStart;
     private Rect _initialPosition;
+    private RectTransform _mapRectTransform;
+
     // Start is called before the first frame update
     void Start()
     {
+        _mapRectTransform = MapImage.GetComponent<RectTransform>();
     }
 
     // Update is called once per frame
@@ -27,28 +38,51 @@ public class MapDraggerScript : MonoBehaviour, IPointerEnterHandler, IPointerExi
             return;
         float scrolling = Input.GetAxis("Mouse ScrollWheel") / 2;
         var rect = MapImage.uvRect;
-        if (Mathf.Approximately(rect.height, 0.1f) && scrolling > 0)
+        if (Mathf.Approximately(rect.height, 0.05f) && scrolling > 0)
         {
             scrolling = 0;
         }
-        rect.height = Mathf.Clamp(rect.height - scrolling / Sensitivity, 0.1f, 1f);
-        rect.width = Mathf.Clamp(rect.width - scrolling / Sensitivity, 0.1f, 1f);
+        rect.height = Mathf.Clamp(rect.height - scrolling / Sensitivity, 0.05f, 1f);
+        rect.width = Mathf.Clamp(rect.width - scrolling / Sensitivity, 0.05f, 1f);
         rect.y += scrolling / (Sensitivity * 2);
         rect.x += scrolling / (Sensitivity * 2);
         if (_dragging)
         {
-            var dragDelta = (_dragStart - Input.mousePosition) / 300f * rect.height;
+            if (Input.mousePosition != _dragStart)
+                _hasMoved = true;
+            var dragDelta = (_dragStart - Input.mousePosition) / MapSize * rect.height;
             rect.y = _initialPosition.y + dragDelta.y;
             rect.x = _initialPosition.x + dragDelta.x;
         }
-        
 
-        rect.y = Mathf.Clamp(rect.y ,0, 1 - rect.width);
+
+        rect.y = Mathf.Clamp(rect.y, 0, 1 - rect.width);
         rect.x = Mathf.Clamp(rect.x, 0, 1 - rect.height);
         MapImage.uvRect = rect;
+
+        // Pin Update thingy
+        var pinScreenLocation = AbsoluteUVRectToScreenLocation(GuessLocation);
+        // This bounds checking code is cheese, and yes i could make it with Mathf.abs but idc
+        if (pinScreenLocation.x > this.gameObject.transform.position.x - _mapRectTransform.sizeDelta.x / 2 &&
+            pinScreenLocation.x < this.gameObject.transform.position.x + _mapRectTransform.sizeDelta.x / 2)
+            Pin.transform.position = new (pinScreenLocation.x, Pin.transform.position.y);
+        if (pinScreenLocation.y > this.gameObject.transform.position.y - _mapRectTransform.sizeDelta.y / 2 &&
+            pinScreenLocation.y < this.gameObject.transform.position.y + _mapRectTransform.sizeDelta.y / 2)
+            Pin.transform.position = new(Pin.transform.position.x, pinScreenLocation.y);
+
+        if (CorrectPinVisible)
+        {
+            var greenPinScreenLocation = AbsoluteUVRectToScreenLocation(CorrectLocation);
+            if (greenPinScreenLocation.x > this.gameObject.transform.position.x - _mapRectTransform.sizeDelta.x / 2 &&
+            greenPinScreenLocation.x < this.gameObject.transform.position.x + _mapRectTransform.sizeDelta.x / 2)
+                GreenPin.transform.position = new(greenPinScreenLocation.x, GreenPin.transform.position.y);
+            if (greenPinScreenLocation.y > this.gameObject.transform.position.y - _mapRectTransform.sizeDelta.y / 2 &&
+                greenPinScreenLocation.y < this.gameObject.transform.position.y + _mapRectTransform.sizeDelta.y / 2)
+                GreenPin.transform.position = new(GreenPin.transform.position.x, greenPinScreenLocation.y);
+        }
+        else
+            GreenPin.transform.position = new(-1000, -1000);
     }
-
-
     public void OnPointerEnter(PointerEventData eventData)
     {
         _selected = true;
@@ -64,11 +98,39 @@ public class MapDraggerScript : MonoBehaviour, IPointerEnterHandler, IPointerExi
         _dragging = true;
         _dragStart = Input.mousePosition;
         _initialPosition = MapImage.uvRect;
-        Debug.Log($"{MapImage.gameObject.transform.position} Mouse: {Input.mousePosition}");
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        if (_dragStart == Input.mousePosition && !_hasMoved)
+        {
+            GuessLocation = ScreenLocationToAbsoluteUVRect(Input.mousePosition);
+            Debug.Log($"mouse click at {AbsoluteUVRectToInGameCoords(GuessLocation = ScreenLocationToAbsoluteUVRect(Input.mousePosition))}");
+            LocationString.text = AbsoluteUVRectToInGameCoords(GuessLocation).ToString("F0");
+        }
+        _hasMoved = false;
         _dragging = false;
+    }
+
+    // this is the one that is stored
+    // Transforms the position of the mouse on screen into a vector of where it is x,y wise on the map [0,1] for both. (0,0) is bottom left
+    private Vector2 ScreenLocationToAbsoluteUVRect(Vector3 clickLocation)
+    {
+        var uvRectLocation = Vector3.one - (this.gameObject.transform.position - clickLocation + new Vector3(MapSize / 2, MapSize / 2, MapSize / 2)) / MapSize;
+        return new Vector2(uvRectLocation.x * MapImage.uvRect.width + MapImage.uvRect.x, uvRectLocation.y * MapImage.uvRect.height + MapImage.uvRect.y);
+    }
+
+    // Invert Linear Transform of Above
+    private Vector3 AbsoluteUVRectToScreenLocation(Vector2 absoluteUVRectPosition)
+    {
+        var someVar = new Vector3((absoluteUVRectPosition.x - MapImage.uvRect.x) / MapImage.uvRect.width, (absoluteUVRectPosition.y - MapImage.uvRect.y) / MapImage.uvRect.height, 0);
+        return this.gameObject.transform.position + new Vector3(MapSize/2,MapSize/2,MapSize) - ((Vector3.one - someVar) * MapSize);
+    }
+    // this is the one that is displayed
+    public static Vector2 AbsoluteUVRectToInGameCoords(Vector3 absoluteUVRectPosition)
+    {
+        return new Vector2( 
+            Mathf.Floor((absoluteUVRectPosition.x) * 875f) - 437f, 
+            437f - Mathf.Floor(absoluteUVRectPosition.y * 875f));
     }
 }
