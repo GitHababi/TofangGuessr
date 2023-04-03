@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 public class CameraDraggerScript : MonoBehaviour
 {
     public bool Dragging { get; private set; }
+    public bool DraggingEnabled;
     public Camera Camera;
     
     private float _speed;
@@ -19,6 +20,12 @@ public class CameraDraggerScript : MonoBehaviour
 
     void Update()
     {
+        if (!DraggingEnabled)
+        {
+            Dragging = false;
+            return;
+        }
+
         if (!EventSystem.current.IsPointerOverGameObject())
         {
             float scroll = Input.GetAxis("Mouse ScrollWheel");
