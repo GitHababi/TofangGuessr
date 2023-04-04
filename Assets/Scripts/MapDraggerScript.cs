@@ -32,6 +32,7 @@ public class MapDraggerScript : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
     void Awake()
     {
+        GuessLocation = new Vector2(0.5f, 0.5f);
         OriginalPosition = gameObject.transform.position;
         _rectTransform = MapImage.GetComponent<RectTransform>();
     }

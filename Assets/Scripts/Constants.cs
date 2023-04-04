@@ -11,7 +11,7 @@ public class Constants : MonoBehaviour
     public Material TMKTower;
 
     public static (Vector2,Material)[] Locations;
-    private void Start()
+    private void Awake()
     {
         Locations = new[]
         {
