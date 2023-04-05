@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -74,21 +75,21 @@ public class MapDraggerScript : MonoBehaviour, IPointerEnterHandler, IPointerExi
     {
         var pinScreenLocation = AbsoluteUVRectToScreenLocation(GuessLocation);
         // This bounds checking code is cheese, and yes i could make it with Mathf.abs but idc
-        if (pinScreenLocation.x > this.gameObject.transform.position.x - MapSize / 2 &&
-            pinScreenLocation.x < this.gameObject.transform.position.x + MapSize / 2)
+        if (pinScreenLocation.x > gameObject.transform.position.x - MapSize / 2 &&
+            pinScreenLocation.x < gameObject.transform.position.x + MapSize / 2)
             Pin.transform.position = new(pinScreenLocation.x, Pin.transform.position.y);
-        if (pinScreenLocation.y > this.gameObject.transform.position.y - MapSize / 2 &&
-            pinScreenLocation.y < this.gameObject.transform.position.y + MapSize / 2)
+        if (pinScreenLocation.y > gameObject.transform.position.y - MapSize / 2 &&
+            pinScreenLocation.y < gameObject.transform.position.y + MapSize / 2)
             Pin.transform.position = new(Pin.transform.position.x, pinScreenLocation.y);
 
         if (CorrectPinVisible)
         {
             var greenPinScreenLocation = AbsoluteUVRectToScreenLocation(CorrectLocation);
-            if (greenPinScreenLocation.x > this.gameObject.transform.position.x - MapSize / 2 &&
-            greenPinScreenLocation.x < this.gameObject.transform.position.x + MapSize / 2)
+            if (greenPinScreenLocation.x > gameObject.transform.position.x - MapSize / 2 &&
+            greenPinScreenLocation.x < gameObject.transform.position.x + MapSize / 2)
                 GreenPin.transform.position = new(greenPinScreenLocation.x, GreenPin.transform.position.y);
-            if (greenPinScreenLocation.y > this.gameObject.transform.position.y - MapSize / 2 &&
-                greenPinScreenLocation.y < this.gameObject.transform.position.y + MapSize / 2)
+            if (greenPinScreenLocation.y > gameObject.transform.position.y - MapSize / 2 &&
+                greenPinScreenLocation.y < gameObject.transform.position.y + MapSize / 2)
                 GreenPin.transform.position = new(GreenPin.transform.position.x, greenPinScreenLocation.y);
         }
         else
@@ -151,7 +152,7 @@ public class MapDraggerScript : MonoBehaviour, IPointerEnterHandler, IPointerExi
     public static Vector2 AbsoluteUVRectToInGameCoords(Vector2 absoluteUVRectPosition)
     {
         return new Vector2( 
-            Mathf.Floor((absoluteUVRectPosition.x) * 875f) - 437f, 
-            437f - Mathf.Floor(absoluteUVRectPosition.y * 875f));
+            Mathf.RoundToInt((absoluteUVRectPosition.x) * 875f) - 437f, 
+            437f - Mathf.RoundToInt(absoluteUVRectPosition.y * 875f));
     }
 }
