@@ -34,20 +34,26 @@ public class GameManager : MonoBehaviour
     public GameObject Cover;
     public Text LoadingBar;
 
+    public AudioClip PlingNoise;
+
+    private (Vector2, Material)[] locations;
+
     void Start()
     {
         GuessButton.onClick.AddListener(MakeGuess);
         StartButton.onClick.AddListener(NextRoundButton);
         _roundNumber = 1;
+        locations = RandomSampleWithoutReplacement(Constants.Locations, 5);
         StartRound();
     }
     void Update()
     {
+        if (!ScoreboardPanel.activeSelf && (int)(_timeRemaining) == 0)
+            MakeGuess();
         if (_timeRemaining == 0)
             return;
-
             _timeRemaining -= Time.deltaTime;
-            TimerText.text = ((int)_timeRemaining)/60 + ":" + ((int)_timeRemaining) % 60;
+        TimerText.text = ((int)_timeRemaining) / 60 + ":" + ((((int)_timeRemaining % 60) < 10) ? "0" : "") + ((int)_timeRemaining) % 60;
         
     }
 
@@ -69,8 +75,8 @@ public class GameManager : MonoBehaviour
         var cameraDragger = Camera.gameObject.GetComponent<CameraDraggerScript>();
         cameraDragger.DraggingEnabled = false;
 
-        var guessCoords = MapDraggerScript.AbsoluteUVRectToInGameCoords(draggerScript.GuessLocation);
-        var correctCoords = MapDraggerScript.AbsoluteUVRectToInGameCoords(draggerScript.CorrectLocation);
+        var guessCoords = MapDraggerScript.UVRectToCoords(draggerScript.GuessLocation);
+        var correctCoords = MapDraggerScript.UVRectToCoords(draggerScript.CorrectLocation);
         int score = GetScore(Vector3.Distance(guessCoords, correctCoords));
         _totalScore += score;
 
@@ -116,10 +122,8 @@ public class GameManager : MonoBehaviour
         ScoreboardPanel.SetActive(false);
         GameplayPanel.SetActive(true);
 
-        int randomLocation = (int)(UnityEngine.Random.value * Constants.Locations.Length); // Randomize Location
-        RenderSettings.skybox = Constants.Locations[randomLocation].Item2;
-        mapDragger.CorrectLocation = Constants.Locations[randomLocation].Item1;
-
+        mapDragger.CorrectLocation = locations[_roundNumber - 1].Item1;
+        RenderSettings.skybox = locations[_roundNumber - 1 ].Item2;
 
         RoundNumber.text = _roundNumber + "/5";
 
@@ -131,7 +135,8 @@ public class GameManager : MonoBehaviour
         cameraDragger.DraggingEnabled = true;
 
 
-        _timeRemaining = 150f - 30f * Constants.Difficulty;
+        AudioSource.PlayClipAtPoint(PlingNoise, Vector3.zero);
+        _timeRemaining = 100f - 25f * Constants.Difficulty;
     }
     private int GetScore(float distance)
     {
@@ -139,5 +144,27 @@ public class GameManager : MonoBehaviour
         if (distance > maxDistance)
             return 0;
         return Mathf.RoundToInt(50f * Mathf.Cos(Mathf.PI * distance / maxDistance) + 50f);
+    }
+
+    private static (Vector2, Material)[] RandomSampleWithoutReplacement((Vector2, Material)[] array, int sampleSize)
+    {
+        if (sampleSize >= array.Length)
+        {
+            return array; // return the original array if the sample size is equal to or larger than the length of the array
+        }
+
+        (Vector2, Material)[] result = new (Vector2, Material)[sampleSize];
+        int currentIndex = 0;
+
+        for (int i = 0; i < sampleSize; i++)
+        {
+            int remaining = array.Length - currentIndex;
+            int selectedIndex = (int)(UnityEngine.Random.value * remaining); // select a random index from the remaining elements
+            result[i] = array[currentIndex + selectedIndex]; // add the selected element to the result array
+            array[currentIndex + selectedIndex] = array[currentIndex + remaining - 1]; // swap the selected element with the last remaining element
+            currentIndex++; // move to the next element in the array
+        }
+
+        return result;
     }
 }

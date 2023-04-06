@@ -179,6 +179,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GrowRate: 6
   ScaleSize: 1.1
+  ClickNoise: {fileID: 8300000, guid: 5abae5d671f645d4196fb247418d5525, type: 3}
 --- !u!114 &83784244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -403,7 +404,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -538,7 +539,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -831,7 +832,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -970,6 +971,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GrowRate: 6
   ScaleSize: 1.1
+  ClickNoise: {fileID: 8300000, guid: 5abae5d671f645d4196fb247418d5525, type: 3}
 --- !u!114 &826295917
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1122,6 +1124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GrowRate: 6
   ScaleSize: 1.1
+  ClickNoise: {fileID: 8300000, guid: 5abae5d671f645d4196fb247418d5525, type: 3}
 --- !u!114 &876240407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1701,6 +1704,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GrowRate: 6
   ScaleSize: 1.1
+  ClickNoise: {fileID: 8300000, guid: 5abae5d671f645d4196fb247418d5525, type: 3}
 --- !u!114 &1591518169
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1767,7 +1771,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1979,6 +1983,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GrowRate: 6
   ScaleSize: 1.1
+  ClickNoise: {fileID: 8300000, guid: 5abae5d671f645d4196fb247418d5525, type: 3}
 --- !u!114 &1711453814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2222,7 +2227,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: 0a2b9d716f43b164cbff1c2515eba6f4, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: df802f79f797f244ca78c1cd2a456245, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3447595, g: 0.34990087, b: 0.38848817, a: 1}
+  m_IndirectSpecularColor: {r: 0.44434768, g: 0.43779665, b: 0.434158, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -438,7 +438,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -651,7 +651,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.31764707, g: 0.03137255, b: 0.03137255, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -835,6 +835,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GrowRate: 5
   ScaleSize: 1.1
+  ClickNoise: {fileID: 8300000, guid: 5abae5d671f645d4196fb247418d5525, type: 3}
 --- !u!114 &1012337665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1342,7 +1343,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0.76470596, b: 0.76470596, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1700,6 +1701,7 @@ MonoBehaviour:
   ScoreText: {fileID: 899126449}
   Cover: {fileID: 2043174219}
   LoadingBar: {fileID: 1940757215}
+  PlingNoise: {fileID: 8300000, guid: 6063e7afaa53cea4a802c137fa2eaf2b, type: 3}
 --- !u!4 &1950425249
 Transform:
   m_ObjectHideFlags: 0
@@ -1729,6 +1731,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Center: {fileID: 2100000, guid: ace013abc5843a14fb932d39d799e7fe, type: 2}
   TMKTower: {fileID: 2100000, guid: 0a2b9d716f43b164cbff1c2515eba6f4, type: 2}
+  HIOfficeButura: {fileID: 2100000, guid: df802f79f797f244ca78c1cd2a456245, type: 2}
+  JungleHouse: {fileID: 2100000, guid: 669cfd91a1628b841bd0b3790ecfebe1, type: 2}
+  StrangeStructure: {fileID: 2100000, guid: dc337f55048a78848bfa717ea525153c, type: 2}
+  TofangStadium: {fileID: 2100000, guid: e5ff41bb06e2a6949ab9cd4064b548d8, type: 2}
+  IONSpaceLabs: {fileID: 2100000, guid: a8e5a63fccabe3a40ac9590f037236a1, type: 2}
+  PresidentialManor: {fileID: 2100000, guid: 2b17d4f1165be084286c6077cc772225, type: 2}
 --- !u!1 &1963549544
 GameObject:
   m_ObjectHideFlags: 0
@@ -1943,6 +1951,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GrowRate: 5
   ScaleSize: 1.1
+  ClickNoise: {fileID: 8300000, guid: 5abae5d671f645d4196fb247418d5525, type: 3}
 --- !u!1 &1999356782
 GameObject:
   m_ObjectHideFlags: 0
