@@ -159,10 +159,10 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < sampleSize; i++)
         {
             int remaining = array.Length - currentIndex;
-            int selectedIndex = (int)(UnityEngine.Random.value * remaining); // select a random index from the remaining elements
-            result[i] = array[currentIndex + selectedIndex]; // add the selected element to the result array
-            array[currentIndex + selectedIndex] = array[currentIndex + remaining - 1]; // swap the selected element with the last remaining element
-            currentIndex++; // move to the next element in the array
+            int selectedIndex = (int)(UnityEngine.Random.value * remaining); 
+            result[i] = array[currentIndex + selectedIndex]; 
+            array[currentIndex + selectedIndex] = array[currentIndex + remaining - 1]; 
+            currentIndex++; 
         }
 
         return result;
